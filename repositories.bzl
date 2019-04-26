@@ -186,6 +186,19 @@ cc_proto_library(
 )
 
 cc_proto_library(
+    name = "authproxy_config_cc_proto",
+    srcs = glob(
+        ["envoy/config/filter/http/authproxy/v2alpha1/*.proto", ],
+    ),
+    default_runtime = "//external:protobuf",
+    protoc = "//external:protoc",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//external:cc_gogoproto",
+    ],
+)
+
+cc_proto_library(
     name = "tcp_cluster_rewrite_config_cc_proto",
     srcs = glob(
         ["envoy/config/filter/network/tcp_cluster_rewrite/v2alpha1/*.proto", ],
@@ -205,13 +218,20 @@ filegroup(
 )
 
 """
-    http_archive(
-        name = "mixerapi_git",
-        build_file_content = BUILD,
-        strip_prefix = "api-" + ISTIO_API,
-        url = "https://github.com/istio/api/archive/" + ISTIO_API + ".tar.gz",
-        sha256 = ISTIO_API_SHA256,
+    #http_archive(
+    #    name = "mixerapi_git",
+    #    build_file_content = BUILD,
+    #    strip_prefix = "api-" + ISTIO_API,
+    #    url = "https://github.com/istio/api/archive/" + ISTIO_API + ".tar.gz",
+    #    sha256 = ISTIO_API_SHA256,
+    #)
+    LOCAL_API_PROJECT = "/Users/hongzh/files/workspaces/go/src/istio.io/api"
+
+    local_repository(
+         name = "mixerapi_git",
+         path = LOCAL_API_PROJECT,
     )
+
     if bind:
         native.bind(
             name = "mixer_api_cc_proto",
@@ -228,6 +248,10 @@ filegroup(
         native.bind(
             name = "jwt_auth_config_cc_proto",
             actual = "@mixerapi_git//:jwt_auth_config_cc_proto",
+        )
+        native.bind(
+            name = "authproxy_config_cc_proto",
+            actual = "@mixerapi_git//:authproxy_config_cc_proto",
         )
         native.bind(
             name = "tcp_cluster_rewrite_config_cc_proto",

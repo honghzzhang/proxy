@@ -22,6 +22,7 @@ envoy_cc_library(
     hdrs = ["http_filter.h"],
     repository = "@envoy",
     deps = [
+        "//external:authproxy_config_cc_proto",
         "@envoy//source/exe:envoy_common_lib",
     ],
 )
