@@ -19,7 +19,7 @@ AuthProxyFilter::AuthProxyFilter(AuthProxyFilterConfigSharedPtr config)
 AuthProxyFilter::~AuthProxyFilter() {}
 
 void AuthProxyFilter::onDestroy() {
-  ENVOY_LOG(debug, "Called AuthProxyFilter : {}", __func__);
+  ENVOY_LOG(warn, "Called AuthProxyFilter : {}", __func__);
 }
 
 const LowerCaseString AuthProxyFilter::headerKey() const {
@@ -31,13 +31,13 @@ const std::string AuthProxyFilter::headerValue() const {
 }
 
 FilterHeadersStatus AuthProxyFilter::decodeHeaders(HeaderMap& headers, bool) {
-  ENVOY_LOG(debug, "AuthProxyFilter::decodeHeaders with config\n{}",
-            config_.DebugString());
+  ENVOY_LOG(warn, "AuthProxyFilter::decodeHeaders with config key: {}, val: {}\n",
+            config_->key(), config_->val());
 
-  ENVOY_LOG(debug, "Headers:\n{}", headers.DebugString());
+  //ENVOY_LOG(warn, "Headers:\n{}", headers);
   //add a header
   headers.addCopy(headerKey(), headerValue());
-  ENVOY_LOG(debug, "Headers after:\n{}", headers.DebugString());
+  //ENVOY_LOG(warn, "Headers after:\n{}", headers);
 
   /*
   headers.iterate(
@@ -47,7 +47,7 @@ FilterHeadersStatus AuthProxyFilter::decodeHeaders(HeaderMap& headers, bool) {
         auto key = std::string(header.key().getStringView());
         auto value = std::string(header.value().getStringView());
         if (headerKey() == key && headerValue() == value) {
-             ENVOY_LOG(debug, "Found matched key/value\n{}{}", key, value);
+             ENVOY_LOG(warn, "Found matched key/value\n{}{}", key, value);
         }
         return Http::HeaderMap::Iterate::Continue;
       },

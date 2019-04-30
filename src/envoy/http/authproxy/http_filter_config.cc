@@ -17,17 +17,17 @@ public:
   Http::FilterFactoryCb createFilterFactory(const Json::Object& json_config, 
                                             const std::string&,
                                             FactoryContext& context) override {
-    ENVOY_LOG(debug, "Called AuthProxyFilterConfig : {}", __func__);
+    ENVOY_LOG(warn, "Called AuthProxyFilterConfig : {}", __func__);
     FilterConfig filter_config;
     translateAuthProxyFilter(json_config, filter_config);
     return createFilter(filter_config, context);
   }
 
   Http::FilterFactoryCb createFilterFactoryFromProto(
-      const Protobuf::Message& filter_config, const std::string&,
+      const Protobuf::Message& proto_config, const std::string&,
       FactoryContext& context) override {
     return createFilter(
-        Envoy::MessageUtil::downcastAndValidate<const FilterConfig&>(filter_config), context);
+        dynamic_cast<const FilterConfig&>(proto_config), context);
   }
 
   /**
@@ -38,12 +38,12 @@ public:
   }
 
   std::string name() override { 
-      return "AuthProxy"; 
+      return "envoy.filters.http.authproxy"; 
   }
 
 private:
   Http::FilterFactoryCb createFilter(const FilterConfig& filter_config, FactoryContext&) {
-    ENVOY_LOG(debug, "Called AuthProxyFilterConfig : {}", __func__);
+    ENVOY_LOG(warn, "Called AuthProxyFilterConfig : {}", __func__);
     Http::AuthProxyFilterConfigSharedPtr config =
         std::make_shared<Http::AuthProxyFilterConfig>(
             Http::AuthProxyFilterConfig(filter_config));
