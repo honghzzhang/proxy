@@ -105,8 +105,10 @@ cc_library(
 # 2) wget https://github.com/istio/api/archive/ISTIO_API_SHA.tar.gz
 # 3) sha256sum ISTIO_API_SHA.tar.gz
 #
-ISTIO_API = "4a9a2a12a70047350bf30dbb4a15f2a0cb683dc9"
-ISTIO_API_SHA256 = "543fbdb1b8caa8b5fbbadabc703242d349a8a2ac8dc545de47f6bdd7f9c9920b"
+#ISTIO_API = "4a9a2a12a70047350bf30dbb4a15f2a0cb683dc9"
+#ISTIO_API_SHA256 = "543fbdb1b8caa8b5fbbadabc703242d349a8a2ac8dc545de47f6bdd7f9c9920b"
+ISTIO_API = "ffe4c9de5ea920b93274e8d25205b307d760e45d"
+ISTIO_API_SHA256 = "7ff0365ad82eca41e829585d39f2cd938823e8c18af1baffe4c8d52dcce8e1a6"
 
 def mixerapi_repositories(bind = True):
     BUILD = """
@@ -218,18 +220,12 @@ filegroup(
 )
 
 """
-    #http_archive(
-    #    name = "mixerapi_git",
-    #    build_file_content = BUILD,
-    #    strip_prefix = "api-" + ISTIO_API,
-    #    url = "https://github.com/istio/api/archive/" + ISTIO_API + ".tar.gz",
-    #    sha256 = ISTIO_API_SHA256,
-    #)
-    LOCAL_API_PROJECT = "/Users/hongzh/files/workspaces/go/src/istio.io/api"
-
-    local_repository(
-         name = "mixerapi_git",
-         path = LOCAL_API_PROJECT,
+    http_archive(
+        name = "mixerapi_git",
+        build_file_content = BUILD,
+        strip_prefix = "api-" + ISTIO_API,
+        url = "https://github.com/istio/api/archive/" + ISTIO_API + ".tar.gz",
+        sha256 = ISTIO_API_SHA256,
     )
 
     if bind:
