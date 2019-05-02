@@ -34,25 +34,13 @@ FilterHeadersStatus AuthProxyFilter::decodeHeaders(HeaderMap& headers, bool) {
   ENVOY_LOG(warn, "AuthProxyFilter::decodeHeaders with config key: {}, val: {}\n",
             config_->key(), config_->val());
 
-  //ENVOY_LOG(warn, "Headers:\n{}", headers);
+  ENVOY_LOG(warn, "Headers size before:\n{}", headers.size());
+  ENVOY_LOG(warn, "Headers before:\n{}", headers);
   //add a header
   headers.addCopy(headerKey(), headerValue());
-  //ENVOY_LOG(warn, "Headers after:\n{}", headers);
+  ENVOY_LOG(warn, "Headers size after:\n{}", headers.size());
+  ENVOY_LOG(warn, "Headers after:\n{}", headers);
 
-  /*
-  headers.iterate(
-      [](const Http::HeaderEntry& header,
-         void* context) -> Http::HeaderMap::Iterate {
-        Context* ctx = static_cast<Context*>(context);
-        auto key = std::string(header.key().getStringView());
-        auto value = std::string(header.value().getStringView());
-        if (headerKey() == key && headerValue() == value) {
-             ENVOY_LOG(warn, "Found matched key/value\n{}{}", key, value);
-        }
-        return Http::HeaderMap::Iterate::Continue;
-      },
-      &ctx);
-  */
   return FilterHeadersStatus::Continue;
 }
 
